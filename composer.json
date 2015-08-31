@@ -1,0 +1,12 @@
+{
+    "name": "kaliop/queueingbundle-kinesis",
+    "description": "Kaliop Queueing Bundle",
+    "license": "GPL-2.0",
+    "autoload": {
+        "psr-4": { "Kaliop\\Queueing\\Plugins\\KinesisBundle\\": "" }
+    },
+    "require": {
+        "kaliop/queueingbundle": "*",
+        ""
+    }
+}

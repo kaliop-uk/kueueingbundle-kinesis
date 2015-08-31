@@ -1,0 +1,17 @@
+parameters:
+    kaliop_queueing.driver.kinesis.class: Kaliop\Queueing\Plugins\KinesisBundle\Adapter\Kinesis\Driver
+    kaliop_queueing.kinesis.queue_manager.class: Kaliop\Queueing\Plugins\KinesisBundle\Adapter\Kinesis\QueueManager 
+
+services:
+    kaliop_queueing.driver.kinesis:
+        class: %kaliop_queueing.driver.kinesis.class%
+        calls:
+            - [ setContainer, [ @service_container ] ]
+        tags:
+            - { name: kaliop_queueing.driver, alias: kinesis }
+
+    kaliop_queueing.kinesis.queue_manager:
+        class: %kaliop_queueing.kinesis.queue_manager.class%
+        #parent: kaliop_queueing.message_producer
+        calls:
+            - [ setContainer, [ @service_container ] ]

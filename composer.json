@@ -7,6 +7,6 @@
     },
     "require": {
         "kaliop/queueingbundle": "*",
-        ""
+        "aws/aws-sdk-php-symfony": "~1.0"
     }
 }

@@ -1,9 +1,4 @@
 <?php
-/**
- * User: gaetano.giunta
- * Date: 19/05/14
- * Time: 19.08
- */
 
 namespace Kaliop\Queueing\Plugins\KinesisBundle\Adapter\Kinesis;
 
@@ -20,10 +15,12 @@ use Kaliop\QueueingBundle\Queue\QueueManagerInterface;
 
 /**
  * A class dedicated not really to sending messages to a queue, bur rather to sending control commands
+ *
+ * @todo add support for stream creation 5needs a nr. of shards)
  */
-class QueueManager /*extends BaseMessageProducer*/ implements ContainerAwareInterface, QueueManagerInterface
+class QueueManager implements ContainerAwareInterface, QueueManagerInterface
 {
-    protected $queue;
+    protected $streamName;
     protected $container;
 
     public function setContainer(ContainerInterface $container = null)
@@ -36,20 +33,17 @@ class QueueManager /*extends BaseMessageProducer*/ implements ContainerAwareInte
      */
     public function setQueueName($queue)
     {
-        $this->queue = $queue;
+        $this->streamName = $queue;
     }
 
     public function listActions()
     {
-        return array(/*'purge', 'delete', 'info', 'list'*/);
+        return array('info', 'list', 'delete');
     }
 
     public function executeAction($action)
     {
-        /*switch ($action) {
-            case 'purge':
-                return $this->purgeQueue();
-
+        switch ($action) {
             case 'delete':
                 return $this->deleteQueue();
 
@@ -61,6 +55,29 @@ class QueueManager /*extends BaseMessageProducer*/ implements ContainerAwareInte
 
             default:
                 throw new InvalidArgumentException("Action $action not supported");
-        }*/
+        }
+    }
+
+    protected function deleteQueue()
+    {
+        $result = $this->getProducerService()->call('DeleteStream', array('StreamName' => $this->streamName));
+        return $result['@metadata'];
+    }
+
+    protected function queueInfo()
+    {
+        $result = $this->getProducerService()->call('DescribeStream', array('StreamName' => $this->streamName));
+        return $result->get('StreamDescription');
+    }
+
+    protected function listQueues()
+    {
+        $result = $this->getProducerService()->call('ListStreams');
+        return $result->get('StreamNames');
+    }
+
+    protected function getProducerService()
+    {
+        return $this->container->get('kaliop_queueing.kinesis.message_producer');
     }
 }

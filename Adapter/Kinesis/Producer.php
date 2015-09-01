@@ -43,7 +43,7 @@ class Producer implements MessageProducerInterface
     }
 
     /**
-     * Publishes the message and does what he wants with the properties
+     * Publishes the message and does nothing with the properties
      *
      * @param string $msgBody
      * @param string $routingKey
@@ -51,21 +51,32 @@ class Producer implements MessageProducerInterface
      */
     public function publish($msgBody, $routingKey = '', $additionalProperties = array())
     {
-        //try {
-            $result = $this->client->putRecord(array_merge(
-                array(
-                    'StreamName' => $this->streamName,
-                    'Data' => $msgBody,
-                    'PartitionKey' => $routingKey
-                ),
-                $this->getClientParams()
-            ));
-        //} catch (\Exception $e) {
-        //    throw new KinesisProxyException($e->getMessage(), $e->getCode(), $e);
-        //}
-        //return $result;
+        $result = $this->client->putRecord(array_merge(
+            array(
+                'StreamName' => $this->streamName,
+                'Data' => $msgBody,
+                'PartitionKey' => $routingKey
+            ),
+            $this->getClientParams()
+        ));
     }
 
+    /**
+     * Allows callers to do whatever they want with the client - useful to the Queue Mgr
+     *
+     * @param string $method
+     * @param array $args
+     * @return mixed
+     */
+    public function call($method, array $args = array())
+    {
+        return $this->client->$method(array_merge($args, $this->getClientParams()));
+    }
+
+    /**
+     * Prepares the extra parameters to be injected into calls made via the Kinesis Client
+     * @return array
+     */
     protected function getClientParams()
     {
         if ($this->debug !== null) {
@@ -76,7 +87,7 @@ class Producer implements MessageProducerInterface
     }
 
     /**
-     * Does nothing
+     * Does nothing - needed to implement the interface correctly
      * @param string $contentType
      */
     public function setContentType($contentType)

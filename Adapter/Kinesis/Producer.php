@@ -2,10 +2,10 @@
 
 namespace Kaliop\Queueing\Plugins\KinesisBundle\Adapter\Kinesis;
 
-use Kaliop\QueueingBundle\Queue\MessageProducerInterface;
+use Kaliop\QueueingBundle\Queue\ProducerInterface;
 use Aws\Kinesis\KinesisClient;
 
-class Producer implements MessageProducerInterface
+class Producer implements ProducerInterface
 {
     /** @var  \Aws\Kinesis\KinesisClient */
     protected $client;

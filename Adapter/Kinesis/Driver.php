@@ -9,6 +9,13 @@ class Driver extends ContainerAware implements DriverInterface
 {
     protected $debug;
 
+    public function getConsumer($queueName)
+    {
+        $consumer = $this->container->get('kaliop_queueing.kinesis.message_consumer');
+        $consumer->setQueueName($queueName);
+        return $consumer;
+    }
+
     public function acceptMessage($message)
     {
 // @todo
@@ -25,9 +32,9 @@ class Driver extends ContainerAware implements DriverInterface
 
     /**
      * @param string $queueName
-     * @return \Kaliop\QueueingBundle\Queue\MessageProducerInterface
+     * @return \Kaliop\QueueingBundle\Queue\ProducerInterface
      */
-    public function getMessageProducer($queueName)
+    public function getProducer($queueName)
     {
         $producer = $this->container->get('kaliop_queueing.kinesis.message_producer');
         $producer->setQueueName($queueName);

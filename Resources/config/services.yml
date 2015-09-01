@@ -2,6 +2,7 @@ parameters:
     kaliop_queueing.driver.kinesis.class: Kaliop\Queueing\Plugins\KinesisBundle\Adapter\Kinesis\Driver
     kaliop_queueing.kinesis.queue_manager.class: Kaliop\Queueing\Plugins\KinesisBundle\Adapter\Kinesis\QueueManager
     kaliop_queueing.kinesis.message_producer.class: Kaliop\Queueing\Plugins\KinesisBundle\Adapter\Kinesis\Producer
+    kaliop_queueing.kinesis.message_consumer.class: Kaliop\Queueing\Plugins\KinesisBundle\Adapter\Kinesis\Consumer
 
 services:
     kaliop_queueing.driver.kinesis:
@@ -20,3 +21,7 @@ services:
     kaliop_queueing.kinesis.message_producer:
         class: %kaliop_queueing.kinesis.message_producer.class%
         arguments: [ %kaliop_queueing_kinesis.default.client_config% ]
+
+    kaliop_queueing.kinesis.message_consumer:
+        class: %kaliop_queueing.kinesis.message_consumer.class%
+        #arguments: [ %kaliop_queueing_kinesis.default.client_config% ]

@@ -14,9 +14,9 @@ use Kaliop\QueueingBundle\Queue\Queue;
 use Kaliop\QueueingBundle\Queue\QueueManagerInterface;
 
 /**
- * A class dedicated not really to sending messages to a queue, bur rather to sending control commands
+ * A class dedicated to sending control commands
  *
- * @todo add support for stream creation 5needs a nr. of shards)
+ * @todo add support for stream creation (needs a nr. of shards)
  */
 class QueueManager implements ContainerAwareInterface, QueueManagerInterface
 {

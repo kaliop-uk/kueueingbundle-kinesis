@@ -1,0 +1,13 @@
+# to be maybe replaced with proper semantic config?
+
+parameters:
+    kaliop_queueing_kinesis.default.client_config:
+        credentials:
+            key: ""
+            secret: ""
+        # @see http://docs.aws.amazon.com/aws-sdk-php/v2/api/class-Aws.Common.Enum.Region.html
+        region: "us-east-1"
+        # NB: It is recommended to fix a specific version for production
+        version: "latest"
+        # to get even more debug info that is available via command line switches, use:
+        #debug: true

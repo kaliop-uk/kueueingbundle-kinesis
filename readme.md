@@ -23,4 +23,8 @@ It has been given its own bundle because it has higher requirements than the bas
 
 * To create a kinesis stream, use the web interface: https://console.aws.amazon.com/kinesis/home 
 
-* When running the kaliop_queueing:queuemessage, usage of the -k option to specify a shard is mandatory
+* When running the kaliop_queueing:queuemessage, usage of the -k option to specify a shard partition key is mandatory.
+  NB: the value used is *not* the id of the shard, rather it is hashed and a shard is picked according to the hash
+  value
+
+* When running the kaliop_queueing:messageconsumer, usage of the -r option to specify a shard Id is mandatory.

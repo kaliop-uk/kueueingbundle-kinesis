@@ -21,15 +21,15 @@ class Driver extends ContainerAware implements DriverInterface
     protected function getQueueCallback($queueName)
     {
         $callbacks = $this->container->getParameter('kaliop_queueing_kinesis.default.consumers');
-        if (!isset($callbacks[$queueName])) {
+        if (!isset($callbacks[$queueName]) || !isset($callbacks[$queueName]['callback'])) {
             throw new \UnexpectedValueException("No callback has been defined for queue '$queueName', please check config parameter 'kaliop_queueing_kinesis.default.consumers'");
         }
-        return $this->container->get($callbacks[$queueName]);
+        return $this->container->get($callbacks[$queueName]['callback']);
     }
 
     public function acceptMessage($message)
     {
-        return ($message instanceof \Kaliop\Queueing\Plugins\KinesisBundle\Adapter\Kinesis\Message);
+        return $message instanceof \Kaliop\Queueing\Plugins\KinesisBundle\Adapter\Kinesis\Message;
     }
 
     /**

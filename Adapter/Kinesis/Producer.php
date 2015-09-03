@@ -87,10 +87,16 @@ class Producer implements ProducerInterface
     }
 
     /**
-     * Does nothing - needed to implement the interface correctly
      * @param string $contentType
+     * @throws \Exception if unsupported contentType is used
+     *
+     * @todo allow different serializations - but the Kinesis protocol does not allow to store the content type in the
+     *       message natively, so we should have to 'invent' an encapsulation format...
      */
     public function setContentType($contentType)
     {
+        if($contentType != 'application/json') {
+            throw new \Exception("Unsupported content-type for message serialization: $contentType. Only 'application/json' is supported");
+        }
     }
 }

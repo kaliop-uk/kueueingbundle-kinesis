@@ -24,4 +24,4 @@ services:
 
     kaliop_queueing.kinesis.message_consumer:
         class: %kaliop_queueing.kinesis.message_consumer.class%
-        #arguments: [ %kaliop_queueing_kinesis.default.client_config% ]
+        arguments: [ %kaliop_queueing_kinesis.default.client_config% ]

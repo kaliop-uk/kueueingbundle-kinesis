@@ -1,4 +1,4 @@
-# to be maybe replaced with proper semantic config?
+# to be replaced with proper semantic config
 
 parameters:
     kaliop_queueing_kinesis.default.client_config:
@@ -11,3 +11,8 @@ parameters:
         version: "latest"
         # to get even more debug info that is available via command line switches, use:
         #debug: true
+
+    # sample configuration
+    kaliop_queueing_kinesis.default.consumers:
+        queuename:
+            callback: kaliop_queueing.message_consumer.http_request

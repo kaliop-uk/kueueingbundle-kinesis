@@ -4,6 +4,7 @@ namespace Kaliop\Queueing\Plugins\KinesisBundle\Adapter\Kinesis;
 
 use Kaliop\QueueingBundle\Queue\MessageConsumerInterface;
 use Kaliop\QueueingBundle\Queue\ConsumerInterface;
+use Kaliop\Queueing\Plugins\KinesisBundle\Service\SequenceNumberStoreInterface;
 use \Aws\Kinesis\KinesisClient;
 
 class Consumer implements ConsumerInterface
@@ -13,6 +14,10 @@ class Consumer implements ConsumerInterface
     protected $shardId;
     protected $streamName;
     protected $callback;
+    /** @var  \Kaliop\Queueing\Plugins\KinesisBundle\Service\SequenceNumberStoreInterface */
+    protected $sequenceNumberStore;
+    // allowed values: TRIM_HORIZON and LATEST
+    protected $defaultShardIteratorType = 'TRIM_HORIZON';
 
     public function __construct(array $config)
     {
@@ -40,6 +45,22 @@ class Consumer implements ConsumerInterface
         $this->callback = $callback;
     }
 
+    public function setSequenceNumberStore(SequenceNumberStoreInterface $store)
+    {
+        $this->sequenceNumberStore = $store;
+    }
+
+    /**
+     * Use this to decide what happens when the Consumer starts getting messages from a shard, and it does not
+     * have stored a pointer to the last consumed message.
+     *
+     * @param string $type either LATEST (discard messages already in the shard) or TRIM_HORIZON (get all messages in the shard)
+     */
+    public function setDefaultShardIteratorType($type)
+    {
+        $this->defaultShardIteratorType = $type;
+    }
+
     /**
      * @see http://docs.aws.amazon.com/aws-sdk-php/v2/api/class-Aws.Kinesis.KinesisClient.html#_getRecords
      * Will throw an exception if $amount is > 10.000
@@ -49,14 +70,7 @@ class Consumer implements ConsumerInterface
      */
     public function consume($amount)
     {
-        $iterator = $this->client->getShardIterator(array(
-            'StreamName' => $this->streamName,
-            'ShardId' => $this->shardId,
-            // ShardIteratorType is required
-/// @TODO this downloads all messages in the shard. How to get only the new ones?
-            'ShardIteratorType' => 'TRIM_HORIZON'
-            //'StartingSequenceNumber' => 'string',  //...
-        ))->get('ShardIterator');
+        $iterator = $this->getInitialMessageIterator();
 
         /// @todo allow a parameter to decide the batch size for reading in continuous loop mode
         $limit = ($amount > 0) ? $amount : 1;
@@ -68,7 +82,14 @@ class Consumer implements ConsumerInterface
                 'Limit' => $limit,
             ));
 
-            foreach($result->get('Records') as $record) {
+            $records = $result->get('Records');
+
+            if (count($records) && $this->sequenceNumberStore) {
+                $last = end($records);
+                $this->sequenceNumberStore->save($this->streamName, $this->shardId, $last['SequenceNumber']);
+            }
+
+            foreach($records as $record) {
                 $data = $record['Data'];
                 unset($record['Data']);
                 $this->callback->receive(new Message($data, $record));
@@ -90,6 +111,32 @@ class Consumer implements ConsumerInterface
                 usleep(200000 - $passedMs);
             }
         }
+    }
+
+    /**
+     * Builds an iterator to start getting messages from the shard based on both injected config and the fact that
+     * the store has a value for the last Sequence Number previously read
+     */
+    protected function getInitialMessageIterator()
+    {
+        $start = null;
+        if ($this->sequenceNumberStore) {
+            $start = $this->sequenceNumberStore->fetch($this->streamName, $this->shardId);
+        }
+
+        $iteratorOptions = array(
+            'StreamName' => $this->streamName,
+            'ShardId' => $this->shardId
+        );
+
+        if ($start == null) {
+            $iteratorOptions['ShardIteratorType'] = $this->defaultShardIteratorType;
+        } else {
+            $iteratorOptions['ShardIteratorType'] = 'AFTER_SEQUENCE_NUMBER';
+            $iteratorOptions['StartingSequenceNumber'] = $start;
+        }
+
+        return $this->client->getShardIterator($iteratorOptions)->get('ShardIterator');
     }
 
     /**

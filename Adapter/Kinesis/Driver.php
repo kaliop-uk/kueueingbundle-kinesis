@@ -11,7 +11,7 @@ class Driver extends ContainerAware implements DriverInterface
 
     public function getConsumer($queueName)
     {
-        $consumer = $this->container->get('kaliop_queueing.kinesis.message_consumer');
+        $consumer = $this->container->get('kaliop_queueing.kinesis.consumer');
         $callback = $this->getQueueCallback($queueName);
         $consumer->setQueueName($queueName);
         $consumer->setCallback($callback);
@@ -50,7 +50,7 @@ class Driver extends ContainerAware implements DriverInterface
      */
     public function getProducer($queueName)
     {
-        $producer = $this->container->get('kaliop_queueing.kinesis.message_producer');
+        $producer = $this->container->get('kaliop_queueing.kinesis.producer');
         $producer->setQueueName($queueName);
         $producer->setDebug($this->debug);
         return $producer;

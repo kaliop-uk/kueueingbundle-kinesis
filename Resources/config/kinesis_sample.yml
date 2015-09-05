@@ -1,0 +1,13 @@
+# Example of configuration of the storage backend used to store Kinesis Sequence Numbers
+
+# NB: this file is NOT parsed, you will have to add a similar configuration to your bundle/application
+
+# NB: if you get an error that this configuration is invalid, it might be because you forgot to activate the DoctrineCacheBundle
+
+doctrine_cache:
+    providers:
+        kinesis_sequence_number_store:
+            php_file:
+                directory: %kernel.cache_dir%/kinesis_sequence_number_store
+    aliases:
+        kinesis_sequence_number_store: kinesis_sequence_number_store

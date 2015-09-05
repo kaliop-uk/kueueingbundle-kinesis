@@ -1,12 +1,14 @@
 {
     "name": "kaliop/queueingbundle-kinesis",
-    "description": "Kaliop Queueing Bundle",
+    "description": "Kaliop Queueing Bundle - Kinesis plugin",
     "license": "GPL-2.0",
     "autoload": {
         "psr-4": { "Kaliop\\Queueing\\Plugins\\KinesisBundle\\": "" }
     },
     "require": {
         "kaliop/queueingbundle": "*",
-        "aws/aws-sdk-php-symfony": "~1.0"
+        "aws/aws-sdk-php-symfony": "~1.0",
+        "symfony/symfony": "~2.4",
+        "doctrine/doctrine-cache-bundle": "*"
     }
 }

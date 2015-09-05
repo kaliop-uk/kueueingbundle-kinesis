@@ -1,6 +1,7 @@
-# to be replaced with proper semantic config
+# @todo to be replaced with proper semantic config ?
 
 parameters:
+
     kaliop_queueing_kinesis.default.client_config:
         credentials:
             key: ""
@@ -12,7 +13,17 @@ parameters:
         # to get even more debug info that is available via command line switches, use:
         #debug: true
 
-    # sample configuration
+    # You should set up a doctrine-cache provider to be used here, f.e. in app/config/config.yml : just copy its name here.
+    # An example config is in kinesis_sample.yml.
+    # @see https://github.com/doctrine/DoctrineCacheBundle for supported configuration
+    kaliop_queueing_kinesis.default.sequence_number_store.doctrine_cache: kinesis_sequence_number_store
+
+    # what to do when the consumer starts and it has no pointer to the last consumed message:
+    # TRIM_HORIZON : get all messages in the shard
+    # LATEST : skip all messages already in the shard, only get ones added starting from now
+    kaliop_queueing_kinesis.default.missing_sequence_number_strategy: 'TRIM_HORIZON'
+
+    # sample configuration: consuler queues
     kaliop_queueing_kinesis.default.consumers:
-        queuename:
+        examplequeuename:
             callback: kaliop_queueing.message_consumer.http_request

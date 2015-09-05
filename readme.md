@@ -9,9 +9,10 @@ It has been given its own bundle because it has higher requirements than the bas
 
 ## Installation
 
-1. Install the bundle.
+1. Install the bundle via Composer.
 
-3. Enable the KaliopQueueingPluginsKinesisBundle bundle in your kernel class registerBundles().    
+3. Enable the KaliopQueueingPluginsKinesisBundle bundle in your kernel class registerBundles().
+    Also enable the DoctrineCacheBundle.
 
 4. Clear all caches if not on a dev environment
 
@@ -23,11 +24,16 @@ It has been given its own bundle because it has higher requirements than the bas
 
 6. Create a Kinesis stream, using the web interface: https://console.aws.amazon.com/kinesis/home
 
-7. Set up configuration according to your AWS account - see parameters.yml in this bundle
+7. Set up configuration according to your AWS account
+
+    - edit parameters.yml in this bundle
+    - copy/include kinesis_sample.yml in your app config, and edit it if needed
  
 8. check that you can list the stream, and the shards in it:
  
         php app/console kaliop_queueing:managequeue list -bkinesis
+        
+        php app/console kaliop_queueing:managequeue info -bkinesis <stream>
 
 9. push a message to the stream 
 
@@ -42,15 +48,19 @@ It has been given its own bundle because it has higher requirements than the bas
 
 * Kinesis groups messages in streams, which are divided into one or more shards each.
     Each message is pushed onto a shard, and has to be pulled from it. 
-    In kaliop-messaging, the following mapping applies:
+    In kaliop-queueing, the following mapping applies:
     - stream => queue
     - shard => routing key
 
 * Kinesis by default does not remove messages from its shards when they are consumed. This means that the consumer has
     to keep an internal pointer to the last consumed message. A service is used to handle the local storage of this
-    value
+    value - the default one provided in this bundle is based on the Doctrine-Cache bundle, and has to be configured
+    to be enabled (see point 7 above). Note that since it uses the cache directory to store the data, on any cache
+    clear the pointer will be reset, and old messages downloaded. To change this behaviour, see the option
+        kaliop_queueing_kinesis.default.missing_sequence_number_strategy
+    in parameters.yml
 
-* When running the kaliop_queueing:queuemessage, usage of the -k option to specify a shard partition key is mandatory.
+* When running the kaliop_queueing:queuemessage, usage of the -r option to specify a shard partition key is mandatory.
     NB: the value used is *not* the id of the shard, rather it is hashed and a shard is picked according to the hash
     value
 

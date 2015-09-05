@@ -78,6 +78,6 @@ class QueueManager implements ContainerAwareInterface, QueueManagerInterface
 
     protected function getProducerService()
     {
-        return $this->container->get('kaliop_queueing.kinesis.message_producer');
+        return $this->container->get('kaliop_queueing.kinesis.producer');
     }
 }

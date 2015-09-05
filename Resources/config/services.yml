@@ -1,8 +1,9 @@
 parameters:
     kaliop_queueing.driver.kinesis.class: Kaliop\Queueing\Plugins\KinesisBundle\Adapter\Kinesis\Driver
     kaliop_queueing.kinesis.queue_manager.class: Kaliop\Queueing\Plugins\KinesisBundle\Adapter\Kinesis\QueueManager
-    kaliop_queueing.kinesis.message_producer.class: Kaliop\Queueing\Plugins\KinesisBundle\Adapter\Kinesis\Producer
-    kaliop_queueing.kinesis.message_consumer.class: Kaliop\Queueing\Plugins\KinesisBundle\Adapter\Kinesis\Consumer
+    kaliop_queueing.kinesis.producer.class: Kaliop\Queueing\Plugins\KinesisBundle\Adapter\Kinesis\Producer
+    kaliop_queueing.kinesis.consumer.class: Kaliop\Queueing\Plugins\KinesisBundle\Adapter\Kinesis\Consumer
+    kaliop_queueing.kinesis.sequence_number_store.doctrine_cache.class: Kaliop\Queueing\Plugins\KinesisBundle\Service\DoctrineCacheSequenceNumberStore
 
 services:
     kaliop_queueing.driver.kinesis:
@@ -18,10 +19,18 @@ services:
         calls:
             - [ setContainer, [ @service_container ] ]
 
-    kaliop_queueing.kinesis.message_producer:
-        class: %kaliop_queueing.kinesis.message_producer.class%
+    kaliop_queueing.kinesis.sequence_number_store:
+        class: %kaliop_queueing.kinesis.sequence_number_store.doctrine_cache.class%
+        # whacky syntax to inject a service with a name coming from a parameter
+        arguments: [ "@=service(parameter('kaliop_queueing_kinesis.default.sequence_number_store.doctrine_cache'))" ]
+
+    kaliop_queueing.kinesis.producer:
+        class: %kaliop_queueing.kinesis.producer.class%
         arguments: [ %kaliop_queueing_kinesis.default.client_config% ]
 
-    kaliop_queueing.kinesis.message_consumer:
-        class: %kaliop_queueing.kinesis.message_consumer.class%
+    kaliop_queueing.kinesis.consumer:
+        class: %kaliop_queueing.kinesis.consumer.class%
         arguments: [ %kaliop_queueing_kinesis.default.client_config% ]
+        calls:
+            - [ setDefaultShardIteratorType, [ %kaliop_queueing_kinesis.default.missing_sequence_number_strategy% ] ]
+            - [ setSequenceNumberStore, [ @kaliop_queueing.kinesis.sequence_number_store ] ]

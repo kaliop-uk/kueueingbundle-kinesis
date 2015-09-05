@@ -34,3 +34,4 @@ services:
         calls:
             - [ setDefaultShardIteratorType, [ %kaliop_queueing_kinesis.default.missing_sequence_number_strategy% ] ]
             - [ setSequenceNumberStore, [ @kaliop_queueing.kinesis.sequence_number_store ] ]
+            - [ setRequestBatchSize, [ %kaliop_queueing_kinesis.default.request_batch_size% ] ]

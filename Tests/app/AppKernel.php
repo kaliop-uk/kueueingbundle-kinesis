@@ -20,7 +20,6 @@ class AppKernel extends Kernel
             //new OldSound\RabbitMqBundle\OldSoundRabbitMqBundle(),
             new Kaliop\QueueingBundle\KaliopQueueingBundle(),
 
-            new Aws\Symfony\AwsBundle(),
             new Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle(),
             new Kaliop\Queueing\Plugins\KinesisBundle\KaliopQueueingPluginsKinesisBundle(),
         );

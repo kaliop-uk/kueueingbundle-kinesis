@@ -18,6 +18,7 @@ class Consumer implements ConsumerInterface
     protected $sequenceNumberStore;
     // allowed values: TRIM_HORIZON and LATEST
     protected $defaultShardIteratorType = 'TRIM_HORIZON';
+    protected $requestBatchSize = 1;
 
     public function __construct(array $config)
     {
@@ -51,6 +52,16 @@ class Consumer implements ConsumerInterface
     }
 
     /**
+     * The number of messages to download in every request to the Kinesis API.
+     * Bigger numbers are better for performances, but there is a limit on the size of the response which Kinesis will send.
+     * @param int $amount
+     */
+    public function setRequestBatchSize($amount)
+    {
+        $this->requestBatchSize = $amount;
+    }
+
+    /**
      * Use this to decide what happens when the Consumer starts getting messages from a shard, and it does not
      * have stored a pointer to the last consumed message.
      *
@@ -72,8 +83,7 @@ class Consumer implements ConsumerInterface
     {
         $iterator = $this->getInitialMessageIterator();
 
-        /// @todo allow a parameter to decide the batch size for reading in continuous loop mode
-        $limit = ($amount > 0) ? $amount : 1;
+        $limit = ($amount > 0) ? $amount : $this->requestBatchSize;
 
         while(true) {
             $reqTime = microtime(true);

@@ -18,12 +18,17 @@ parameters:
     # @see https://github.com/doctrine/DoctrineCacheBundle for supported configuration
     kaliop_queueing_kinesis.default.sequence_number_store.doctrine_cache: kinesis_sequence_number_store
 
-    # what to do when the consumer starts and it has no pointer to the last consumed message:
+    # What to do when the consumer starts and it has no pointer to the last consumed message:
     # TRIM_HORIZON : get all messages in the shard
     # LATEST : skip all messages already in the shard, only get ones added starting from now
     kaliop_queueing_kinesis.default.missing_sequence_number_strategy: 'TRIM_HORIZON'
 
-    # sample configuration: consuler queues
+    # The number of messages to download in a single request to the Kinesis API.
+    # Bigger numbers will give better performances, but the API is rate-limited: the size of a single response
+    # should not exceed 2MB and 10.000 items.
+    kaliop_queueing_kinesis.default.request_batch_size: 1
+
+    # sample configuration: consumer queues
     kaliop_queueing_kinesis.default.consumers:
         examplequeuename:
             callback: kaliop_queueing.message_consumer.http_request

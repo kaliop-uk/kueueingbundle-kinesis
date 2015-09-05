@@ -6,9 +6,12 @@
         "psr-4": { "Kaliop\\Queueing\\Plugins\\KinesisBundle\\": "" }
     },
     "require": {
-        "kaliop/queueingbundle": "*",
+        "kaliop/queueingbundle": ">=0.1",
         "aws/aws-sdk-php-symfony": "~1.0",
         "symfony/symfony": "~2.4",
         "doctrine/doctrine-cache-bundle": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.0"
     }
 }

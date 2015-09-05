@@ -66,3 +66,10 @@ It has been given its own bundle because it has higher requirements than the bas
 
 * When running the kaliop_queueing:messageconsumer, usage of the -r option to specify a shard Id is mandatory.
     If you do not know the Shard Id, use the `kaliop_queueing:managequeue info <stream>` command to see it
+
+
+[![License](https://poser.pugx.org/kaliop/queueingbundle-kinesis/license)](https://packagist.org/packages/kaliop/queueingbundle-kinesis)
+[![Latest Stable Version](https://poser.pugx.org/kaliop/queueingbundle-kinesis/v/stable)](https://packagist.org/packages/kaliop/queueingbundle-kinesis)
+[![Total Downloads](https://poser.pugx.org/kaliop/queueingbundle-kinesis/downloads)](https://packagist.org/packages/kaliop/queueingbundle-kinesis)
+
+[![Build Status](https://travis-ci.org/kaliop-uk/queueingbundle-kinesis.svg?branch=master)](https://travis-ci.org/kaliop-uk/queueingbundle-kinesis)

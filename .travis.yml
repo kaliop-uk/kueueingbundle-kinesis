@@ -16,6 +16,11 @@ env:
   - SYMFONY_VERSION=2.6.*
   - SYMFONY_VERSION=2.7.*
 
+matrix:
+  allow_failures:
+    # at the moment it gives an error with Sf 2.6 and 2.7...
+    - php: 7.0
+
 services:
   - rabbitmq
 

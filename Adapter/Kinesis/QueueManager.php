@@ -30,10 +30,13 @@ class QueueManager implements ContainerAwareInterface, QueueManagerInterface
 
     /**
      * @param string $queue
+     * @return QueueManager
      */
     public function setQueueName($queue)
     {
         $this->streamName = $queue;
+
+        return $this;
     }
 
     public function listActions()

@@ -27,38 +27,59 @@ class Consumer implements ConsumerInterface
 
     /**
      * Does nothing
+     * @param int $limit
+     * @return Consumer
      */
     public function setMemoryLimit($limit)
     {
+        return $this;
     }
 
     /**
      * @param string $key
+     * @return Consumer
      * @todo if null and there is only 1 shard in the stream -> get it! Or allow asking for shard 1, 2, 3, ... instead of using the Id
      */
     public function setRoutingKey($key)
     {
         $this->shardId = $key;
+
+        return $this;
     }
 
+    /**
+     * @param MessageConsumerInterface $callback
+     * @return Consumer
+     */
     public function setCallback(MessageConsumerInterface $callback)
     {
         $this->callback = $callback;
+
+        return $this;
     }
 
+    /**
+     * @param SequenceNumberStoreInterface $store
+     * @return Consumer
+     */
     public function setSequenceNumberStore(SequenceNumberStoreInterface $store)
     {
         $this->sequenceNumberStore = $store;
+
+        return $this;
     }
 
     /**
      * The number of messages to download in every request to the Kinesis API.
      * Bigger numbers are better for performances, but there is a limit on the size of the response which Kinesis will send.
      * @param int $amount
+     * @return Consumer
      */
     public function setRequestBatchSize($amount)
     {
         $this->requestBatchSize = $amount;
+
+        return $this;
     }
 
     /**
@@ -66,10 +87,13 @@ class Consumer implements ConsumerInterface
      * have stored a pointer to the last consumed message.
      *
      * @param string $type either LATEST (discard messages already in the shard) or TRIM_HORIZON (get all messages in the shard)
+     * @return Consumer
      */
     public function setDefaultShardIteratorType($type)
     {
         $this->defaultShardIteratorType = $type;
+
+        return $this;
     }
 
     /**
@@ -151,9 +175,12 @@ class Consumer implements ConsumerInterface
 
     /**
      * @param string $queueName
+     * @return Consumer
      */
     public function setQueueName($queueName)
     {
         $this->streamName = $queueName;
+
+        return $this;
     }
 }

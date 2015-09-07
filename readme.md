@@ -11,35 +11,35 @@ It has been given its own bundle because it has higher requirements than the bas
 
 1. Install the bundle via Composer.
 
-3. Enable the KaliopQueueingPluginsKinesisBundle bundle in your kernel class registerBundles().
+2. Enable the KaliopQueueingPluginsKinesisBundle bundle in your kernel class registerBundles().
     Also enable the DoctrineCacheBundle.
 
-4. Clear all caches if not on a dev environment
+3. Clear all caches if not on a dev environment
 
 
 ## Usage
 
-5. If you do not have an AWS account, sign up for one at http://aws.amazon.com/
+4. If you do not have an AWS account, sign up for one at http://aws.amazon.com/
     NB: note that there is no free tier for Kinesis. Pricing is described at: http://aws.amazon.com/kinesis/pricing/
 
-6. Create a Kinesis stream, using the web interface: https://console.aws.amazon.com/kinesis/home
+5. Create a Kinesis stream, using the web interface: https://console.aws.amazon.com/kinesis/home
 
-7. Set up configuration according to your AWS account
+6. Set up configuration according to your AWS account
 
     - edit parameters.yml in this bundle
     - copy/include kinesis_sample.yml in your app config, and edit it if needed
  
-8. check that you can list the stream, and the shards in it:
+7. check that you can list the stream, and the shards in it:
  
         php app/console kaliop_queueing:managequeue list -bkinesis
         
         php app/console kaliop_queueing:managequeue info -bkinesis <stream>
 
-9. push a message to the stream 
+8. push a message to the stream 
 
         php app/console kaliop_queueing:queuemessage -bkinesis -r<shard-partition> <stream> <jsonpayload>
         
-10. receive messages from the stream
+9. receive messages from the stream
 
         php app/console kaliop_queueing:consumer -bkinesis -r<shard-id> <stream>
 

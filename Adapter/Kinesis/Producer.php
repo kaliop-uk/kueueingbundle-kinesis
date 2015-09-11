@@ -24,11 +24,14 @@ class Producer implements ProducerInterface
 
     /**
      * @param string $queueName
+     * @return Producer
      * @todo test that we can successfully send messages to 2 queues using the same KinesisClient
      */
     public function setQueueName($queueName)
     {
         $this->streamName = $queueName;
+
+        return $this;
     }
 
     /**
@@ -36,10 +39,13 @@ class Producer implements ProducerInterface
      * only used by publish() from now on
      *
      * @param bool $debug use null for 'undefined'
+     * @return Producer
      */
     public function setDebug($debug)
     {
         $this->debug = $debug;
+
+        return $this;
     }
 
     /**
@@ -88,6 +94,7 @@ class Producer implements ProducerInterface
 
     /**
      * @param string $contentType
+     * @return Producer
      * @throws \Exception if unsupported contentType is used
      *
      * @todo allow different serializations - but the Kinesis protocol does not allow to store the content type in the
@@ -98,5 +105,7 @@ class Producer implements ProducerInterface
         if($contentType != 'application/json') {
             throw new \Exception("Unsupported content-type for message serialization: $contentType. Only 'application/json' is supported");
         }
+
+        return $this;
     }
 }

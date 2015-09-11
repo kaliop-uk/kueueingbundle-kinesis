@@ -70,5 +70,7 @@ class Driver extends ContainerAware implements DriverInterface
     public function setDebug($debug)
     {
         $this->debug = $debug;
+
+        return $this;
     }
 }

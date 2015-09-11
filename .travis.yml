@@ -21,9 +21,6 @@ matrix:
     # at the moment it gives an error with Sf 2.6 and 2.7...
     - php: 7.0
 
-services:
-  - rabbitmq
-
 before_install:
   # This is mandatory or 'apt-get install' calls following will fail
   #- sudo apt-get update -qq

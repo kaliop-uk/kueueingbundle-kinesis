@@ -3,20 +3,23 @@ language: php
 # This should make the builds faster
 sudo: false
 
-php:
-  # aws-sdk-php needs php >+ 5.5
-  - 5.5
-  - 5.6
-  - 7.0
-  - hhvm
-
 env:
   # Test only on versions of Sf that are still supported. See: http://symfony.com/doc/current/contributing/community/releases.html#version-history
-  - SYMFONY_VERSION=2.3.*
-  - SYMFONY_VERSION=2.7.*
-  - SYMFONY_VERSION=2.8.*
-  - SYMFONY_VERSION=3.0.*
-  - SYMFONY_VERSION=3.1.*
+  include:
+    # We are no more compatible with SF 2.3
+    #- php: 5.5
+    #  env: SYMFONY_VERSION=2.3.*
+    # aws-sdk-php needs php >+ 5.5
+    - php: 5.5
+      env: SYMFONY_VERSION=2.6.*
+    - php: 5.5
+      env: SYMFONY_VERSION=2.7.*
+    - php: 5.6
+      env: SYMFONY_VERSION=2.8.*
+    - php: 7.0
+      env: SYMFONY_VERSION=3.0.*
+    - php: hhvm
+      env: SYMFONY_VERSION=3.1.*
 
 matrix:
   allow_failures:
@@ -28,7 +31,7 @@ before_install:
   #- sudo apt-get update -qq
 
 install:
-  # Disable xdebug for speed (executing composer), but allow us to e-enable it later
+  # Disable xdebug for speed (executing composer), but allow us to re-enable it later
   # NB: 'php -i' does not work on hhvm
   - if [ "$TRAVIS_PHP_VERSION" = "hhvm" ]; then export XDEBUG_INI=''; fi
   - if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then export XDEBUG_INI=`php -i | grep xdebug.ini | grep home/travis | grep -v '=>' | head -1`; fi

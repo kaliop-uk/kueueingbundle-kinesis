@@ -3,10 +3,13 @@
 namespace Kaliop\Queueing\Plugins\KinesisBundle\Adapter\Kinesis;
 
 use Kaliop\QueueingBundle\Adapter\DriverInterface;
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
-class Driver extends ContainerAware implements DriverInterface
+class Driver implements DriverInterface, ContainerAwareInterface
 {
+    use ContainerAwareTrait;
+
     protected $debug;
 
     public function getConsumer($queueName)

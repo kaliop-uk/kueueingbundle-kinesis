@@ -2,7 +2,6 @@
 
 namespace Kaliop\Queueing\Plugins\KinesisBundle\Service;
 
-
 interface SequenceNumberStoreInterface
 {
     /**

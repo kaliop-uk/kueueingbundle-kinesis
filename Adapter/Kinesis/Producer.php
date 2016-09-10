@@ -67,6 +67,25 @@ class Producer implements ProducerInterface
         ));
     }
 
+    public function batchPublish(array $messages)
+    {
+        $records = aray();
+        foreach($messages as $message) {
+            $records[] = array(
+                'Data' => $message['msgBody'],
+                'PartitionKey' => $message['routingKey']
+            );
+        }
+
+        $result = $this->client->putRecords(array_merge(
+            array(
+                'StreamName' => $this->streamName,
+                'Records' => $records
+            ),
+            $this->getClientParams()
+        ));
+    }
+
     /**
      * Allows callers to do whatever they want with the client - useful to the Queue Mgr
      *

@@ -106,6 +106,8 @@ class Consumer implements ConsumerInterface
      * @param int $amount
      * @param int $timeout
      * @return nothing
+     *
+     * @todo de-hardcode the usage of json encoding
      */
     public function consume($amount, $timeout=0)
     {
@@ -134,7 +136,7 @@ class Consumer implements ConsumerInterface
             foreach($records as $record) {
                 $data = $record['Data'];
                 unset($record['Data']);
-                $this->callback->receive(new Message($data, $record));
+                $this->callback->receive(new Message($data, $record, 'application/json', $this->streamName));
             }
 
             if ($amount > 0) {

@@ -9,12 +9,14 @@ class Message implements MessageInterface
     protected $body;
     protected $properties = array();
     protected $contentType;
+    protected $streamName;
 
-    public function __construct($body, array $properties = array(), $contentType='application/json')
+    public function __construct($body, array $properties = array(), $contentType='application/json', $queueName='')
     {
         $this->body = $body;
         $this->properties = $properties;
         $this->contentType = $contentType;
+        $this->streamName = $queueName;
     }
 
     public function getBody()
@@ -58,5 +60,10 @@ class Message implements MessageInterface
     public function getProperties()
     {
         return $this->properties;
+    }
+
+    public function getQueueName()
+    {
+        return $this->streamName;
     }
 }

@@ -104,13 +104,18 @@ class Consumer implements ConsumerInterface
      * Will throw an exception if $amount is > 10.000
      *
      * @param int $amount
+     * @param int $timeout
      * @return nothing
      */
-    public function consume($amount)
+    public function consume($amount, $timeout=0)
     {
         $iterator = $this->getInitialMessageIterator();
 
         $limit = ($amount > 0) ? $amount : $this->requestBatchSize;
+        if ($timeout > 0) {
+            $startTime = time();
+            $remaining = $timeout;
+        }
 
         while(true) {
             $reqTime = microtime(true);
@@ -133,6 +138,10 @@ class Consumer implements ConsumerInterface
             }
 
             if ($amount > 0) {
+                return;
+            }
+
+            if ($timeout > 0 && ($remaining = ($startTime + $timeout - time())) <= 0) {
                 return;
             }
 

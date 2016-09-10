@@ -7,31 +7,31 @@ parameters:
 
 services:
     kaliop_queueing.driver.kinesis:
-        class: %kaliop_queueing.driver.kinesis.class%
+        class: '%kaliop_queueing.driver.kinesis.class%'
         calls:
-            - [ setContainer, [ @service_container ] ]
+            - [ setContainer, [ '@service_container' ] ]
         tags:
             - { name: kaliop_queueing.driver, alias: kinesis }
 
     kaliop_queueing.kinesis.queue_manager:
-        class: %kaliop_queueing.kinesis.queue_manager.class%
+        class: '%kaliop_queueing.kinesis.queue_manager.class%'
         #parent: kaliop_queueing.message_producer
         calls:
-            - [ setContainer, [ @service_container ] ]
+            - [ setContainer, [ '@service_container' ] ]
 
     kaliop_queueing.kinesis.sequence_number_store:
-        class: %kaliop_queueing.kinesis.sequence_number_store.doctrine_cache.class%
+        class: '%kaliop_queueing.kinesis.sequence_number_store.doctrine_cache.class%'
         # whacky syntax to inject a service with a name coming from a parameter
         arguments: [ "@=service(parameter('kaliop_queueing_kinesis.default.sequence_number_store.doctrine_cache'))" ]
 
     kaliop_queueing.kinesis.producer:
         class: %kaliop_queueing.kinesis.producer.class%
-        arguments: [ %kaliop_queueing_kinesis.default.client_config% ]
+        arguments: [ '%kaliop_queueing_kinesis.default.client_config%' ]
 
     kaliop_queueing.kinesis.consumer:
         class: %kaliop_queueing.kinesis.consumer.class%
-        arguments: [ %kaliop_queueing_kinesis.default.client_config% ]
+        arguments: [ '%kaliop_queueing_kinesis.default.client_config%' ]
         calls:
-            - [ setDefaultShardIteratorType, [ %kaliop_queueing_kinesis.default.missing_sequence_number_strategy% ] ]
-            - [ setSequenceNumberStore, [ @kaliop_queueing.kinesis.sequence_number_store ] ]
-            - [ setRequestBatchSize, [ %kaliop_queueing_kinesis.default.request_batch_size% ] ]
+            - [ setDefaultShardIteratorType, [ '%kaliop_queueing_kinesis.default.missing_sequence_number_strategy%' ] ]
+            - [ setSequenceNumberStore, [ '@kaliop_queueing.kinesis.sequence_number_store' ] ]
+            - [ setRequestBatchSize, [ '%kaliop_queueing_kinesis.default.request_batch_size%' ] ]

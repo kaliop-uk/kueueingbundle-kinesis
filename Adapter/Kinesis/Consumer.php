@@ -151,6 +151,7 @@ class Consumer implements ConsumerInterface
                 return;
             }
 
+            /// @todo use a parameter to decide the polling interval
             // observe MAX 5 requests per sec per shard: sleep for 0.2 secs in between requests
             $passedMs = (microtime(true) - $reqTime) * 1000000;
             if ($passedMs < 200000) {

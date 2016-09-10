@@ -51,8 +51,11 @@ class Consumer implements ConsumerInterface
      * @param MessageConsumerInterface $callback
      * @return Consumer
      */
-    public function setCallback(MessageConsumerInterface $callback)
+    public function setCallback($callback)
     {
+        if (! $callback instanceof \Kaliop\QueueingBundle\Queue\MessageConsumerInterface) {
+            throw new \RuntimeException('Can not set callback to SQS Consumer, as it is not a MessageConsumerInterface');
+        }
         $this->callback = $callback;
 
         return $this;

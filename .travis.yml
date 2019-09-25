@@ -1,25 +1,18 @@
 language: php
 
-# This should make the builds faster
-sudo: false
-
 matrix:
   # Test only on versions of Sf that are still supported. See: http://symfony.com/doc/current/contributing/community/releases.html#version-history
   include:
-    # We are no more compatible with SF 2.3
-    #- php: 5.5
-    #  env: SYMFONY_VERSION=2.3.*
-    # aws-sdk-php needs php >+ 5.5
-    - php: 5.5
-      env: SYMFONY_VERSION=2.6.* CODE_COVERAGE=0
-    - php: 5.5
-      env: SYMFONY_VERSION=2.7.* CODE_COVERAGE=0
     - php: 5.6
-      env: SYMFONY_VERSION=2.8.* CODE_COVERAGE=1
+      env: SYMFONY_VERSION=2.7.* CODE_COVERAGE=0
     - php: 7.0
-      env: SYMFONY_VERSION=3.0.* CODE_COVERAGE=0
-    - php: hhvm
-      env: SYMFONY_VERSION=3.1.* CODE_COVERAGE=0
+      env: SYMFONY_VERSION=2.8.* CODE_COVERAGE=1
+    - php: 7.1
+      env: SYMFONY_VERSION=3.4.* CODE_COVERAGE=0
+    - php: 7.2
+      env: SYMFONY_VERSION=4.2.* CODE_COVERAGE=0
+    - php: 7.3
+      env: SYMFONY_VERSION=4.3.* CODE_COVERAGE=0
 
 before_install:
   # This is mandatory or 'apt-get install' calls following will fail
@@ -27,9 +20,7 @@ before_install:
 
 install:
   # Disable xdebug for speed (executing composer), but allow us to re-enable it later
-  # NB: 'php -i' does not work on hhvm
-  - if [ "$TRAVIS_PHP_VERSION" = "hhvm" ]; then export XDEBUG_INI=''; fi
-  - if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then export XDEBUG_INI=`php -i | grep xdebug.ini | grep home/travis | grep -v '=>' | head -1`; fi
+  - export XDEBUG_INI=`php -i | grep xdebug.ini | grep home/travis | grep -v '=>' | head -1`
   - export XDEBUG_INI=${XDEBUG_INI/,/}
   - if [ "$XDEBUG_INI" != "" ]; then mv "$XDEBUG_INI" "$XDEBUG_INI.bak"; fi
 
@@ -44,14 +35,13 @@ before_script:
   - cp phpunit.xml.dist phpunit.xml
 
 script:
-  - if [ "$CODE_COVERAGE" = "1" ]; then phpunit --colors --coverage-clover=coverage.clover Tests/phpunit; else phpunit --colors Tests/phpunit; fi
+  - if [ "$CODE_COVERAGE" = "1" ]; then ./vendor/phpunit/phpunit/phpunit --colors --coverage-clover=coverage.clover Tests/phpunit; else phpunit --colors Tests/phpunit; fi
 
 after_failure:
   # Display as much info as we can to help developers
   #- cat apache_error.log
   #- cat apache_access.log
-  #- cat /var/log/hhvm/error.log
-  - if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then php -i; fi
+  - php -i
 
 after_script:
   # Upload code-coverage to Scrutinizer

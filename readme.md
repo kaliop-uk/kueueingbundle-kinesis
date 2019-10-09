@@ -73,4 +73,5 @@ It has been given its own bundle because it has higher requirements than the bas
 [![Total Downloads](https://poser.pugx.org/kaliop/queueingbundle-kinesis/downloads)](https://packagist.org/packages/kaliop/queueingbundle-kinesis)
 
 [![Build Status](https://travis-ci.org/kaliop-uk/kueueingbundle-kinesis.svg?branch=master)](https://travis-ci.org/kaliop-uk/queueingbundle-kinesis)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/kaliop-uk/kueueingbundle-kinesis/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/kaliop-uk/kueueingbundle-kinesis/?branch=master) 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/cbaefe33-51f4-4b7e-a423-c08797f7359b/mini.png)](https://insight.sensiolabs.com/projects/cbaefe33-51f4-4b7e-a423-c08797f7359b)

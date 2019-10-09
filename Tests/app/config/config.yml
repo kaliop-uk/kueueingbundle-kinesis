@@ -7,6 +7,6 @@ doctrine_cache:
     providers:
         kinesis_sequence_number_store:
             php_file:
-                directory: %kernel.cache_dir%/kinesis_sequence_number_store
+                directory: '%kernel.cache_dir%/kinesis_sequence_number_store'
     aliases:
         kinesis_sequence_number_store: kinesis_sequence_number_store

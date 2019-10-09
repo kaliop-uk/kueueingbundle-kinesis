@@ -19,6 +19,8 @@ matrix:
   #- sudo apt-get update -qq
 
 install:
+  - phpenv config-add Tests/travis/zzz_php.ini
+
   # Disable xdebug for speed (executing composer), but allow us to re-enable it later
   - export XDEBUG_INI=`php -i | grep xdebug.ini | grep home/travis | grep -v '=>' | head -1`
   - export XDEBUG_INI=${XDEBUG_INI/,/}

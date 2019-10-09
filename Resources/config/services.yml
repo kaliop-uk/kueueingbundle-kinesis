@@ -26,11 +26,11 @@ services:
         arguments: [ "@=service(parameter('kaliop_queueing_kinesis.default.sequence_number_store.doctrine_cache'))" ]
 
     kaliop_queueing.kinesis.producer:
-        class: %kaliop_queueing.kinesis.producer.class%
+        class: '%kaliop_queueing.kinesis.producer.class%'
         arguments: [ '%kaliop_queueing_kinesis.default.client_config%' ]
 
     kaliop_queueing.kinesis.consumer:
-        class: %kaliop_queueing.kinesis.consumer.class%
+        class: '%kaliop_queueing.kinesis.consumer.class%'
         arguments: [ '%kaliop_queueing_kinesis.default.client_config%' ]
         calls:
             - [ setDefaultShardIteratorType, [ '%kaliop_queueing_kinesis.default.missing_sequence_number_strategy%' ] ]

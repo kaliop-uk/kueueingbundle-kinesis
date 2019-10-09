@@ -13,6 +13,7 @@ services:
             - [ setQueueManager, [ '@kaliop_queueing.kinesis.queue_manager' ] ]
         tags:
             - { name: kaliop_queueing.driver, alias: kinesis }
+        public: true
 
     kaliop_queueing.kinesis.queue_manager:
         class: '%kaliop_queueing.kinesis.queue_manager.class%'

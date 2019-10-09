@@ -22,9 +22,9 @@ class servicesTest extends WebTestCase
     {
         $container = $this->getContainer();
         $service = $container->get('kaliop_queueing.driver.kinesis');
-        $service = $container->get('kaliop_queueing.kinesis.queue_manager');
-        $service = $container->get('kaliop_queueing.kinesis.sequence_number_store');
-        $service = $container->get('kaliop_queueing.kinesis.producer');
-        $service = $container->get('kaliop_queueing.kinesis.consumer');
+        $service = $container->get('test_alias.kaliop_queueing.kinesis.queue_manager');
+        $service = $container->get('test_alias.kaliop_queueing.kinesis.sequence_number_store');
+        $service = $container->get('test_alias.kaliop_queueing.kinesis.producer');
+        $service = $container->get('test_alias.kaliop_queueing.kinesis.consumer');
     }
 }

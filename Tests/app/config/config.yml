@@ -10,3 +10,18 @@ doctrine_cache:
                 directory: '%kernel.cache_dir%/kinesis_sequence_number_store'
     aliases:
         kinesis_sequence_number_store: kinesis_sequence_number_store
+
+services:
+    # work around services being private by default in SF 3.4->4.0: register public testable aliases
+    test_alias.kaliop_queueing.kinesis.queue_manager:
+        alias: 'kaliop_queueing.kinesis.queue_manager'
+        public: true
+    test_alias.kaliop_queueing.kinesis.producer:
+        alias: 'kaliop_queueing.kinesis.producer'
+        public: true
+    test_alias.kaliop_queueing.kinesis.consumer:
+        alias: 'kaliop_queueing.kinesis.consumer'
+        public: true
+    test_alias.kaliop_queueing.kinesis.sequence_number_store:
+        alias: 'kaliop_queueing.kinesis.sequence_number_store'
+        public: true

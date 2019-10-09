@@ -14,7 +14,7 @@ matrix:
     - php: 7.3
       env: SYMFONY_VERSION=4.3.* CODE_COVERAGE=0
 
-before_install:
+#before_install:
   # This is mandatory or 'apt-get install' calls following will fail
   #- sudo apt-get update -qq
 
@@ -24,7 +24,6 @@ install:
   - export XDEBUG_INI=${XDEBUG_INI/,/}
   - if [ "$XDEBUG_INI" != "" ]; then mv "$XDEBUG_INI" "$XDEBUG_INI.bak"; fi
 
-  - composer self-update
   - composer require --prefer-source --dev symfony/symfony:${SYMFONY_VERSION}
   - composer install
 
@@ -48,7 +47,7 @@ after_script:
   - if [ "$CODE_COVERAGE" = "1" ]; then wget https://scrutinizer-ci.com/ocular.phar; fi
   - if [ "$CODE_COVERAGE" = "1" ]; then php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi
   # Upload code-coverage to CodeClimate
-  - if [ "$CODE_COVERAGE" = "1" ]; then CODECLIMATE_REPO_TOKEN=TOBEGOTTEN ./vendor/bin/test-reporter --coverage-report=coverage.clover; fi
+  #- if [ "$CODE_COVERAGE" = "1" ]; then CODECLIMATE_REPO_TOKEN=TOBEGOTTEN ./vendor/bin/test-reporter --coverage-report=coverage.clover; fi
 
 # Try to avoid problems with shared composer caches...
 #cache:

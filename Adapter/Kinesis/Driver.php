@@ -3,12 +3,14 @@
 namespace Kaliop\Queueing\Plugins\KinesisBundle\Adapter\Kinesis;
 
 use Kaliop\QueueingBundle\Adapter\DriverInterface;
+use Kaliop\QueueingBundle\Queue\QueueManagerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 class Driver implements DriverInterface, ContainerAwareInterface
 {
     use ContainerAwareTrait;
+    use QueueManagerAwareTrait;
 
     protected $debug;
 
@@ -65,7 +67,7 @@ class Driver implements DriverInterface, ContainerAwareInterface
      */
     public function getQueueManager($queueName)
     {
-        $mgr = $this->container->get('kaliop_queueing.kinesis.queue_manager');
+        $mgr = $this->getQueueManagerInternal();
         $mgr->setQueueName($queueName);
         return $mgr;
     }

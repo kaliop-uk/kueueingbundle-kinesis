@@ -1,7 +1,7 @@
 # Configuration file used for running tests
 
 framework:
-    secret: "ThisIsNotSoSercretSoWeTestIt"
+    secret: "ThisIsNotSoSecretSoWeTestIt"
 
 doctrine_cache:
     providers:

@@ -10,6 +10,7 @@ services:
         class: '%kaliop_queueing.driver.kinesis.class%'
         calls:
             - [ setContainer, [ '@service_container' ] ]
+            - [ setQueueManager, [ '@kaliop_queueing.kinesis.queue_manager' ] ]
         tags:
             - { name: kaliop_queueing.driver, alias: kinesis }
 
